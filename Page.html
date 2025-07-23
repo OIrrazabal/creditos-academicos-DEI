@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta de Créditos DEI</title>
+  <base target="_top">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    :root {
+      --primary-color: #1E2F8C;
+      --secondary-color: #e9ecef;
+      --hover-color: #152266;
+      --shadow: 0 4px 15px rgba(0,0,0,0.1);
+      --border-radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      color: #333;
+      min-height: 100vh;
+      padding: 0;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 15px;
+    }
+
+    .content-wrapper {
+      background-color: #fff;
+      padding: 25px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 25px;
+      transition: all 0.3s ease;
+    }
+
+    .content-wrapper:hover {
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    h1 {
+      color: var(--primary-color);
+      font-weight: 700;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+    }
+
+    h5 {
+      color: var(--primary-color);
+      font-weight: 600;
+      margin-bottom: 15px;
+      font-size: clamp(1.1rem, 3vw, 1.25rem);
+    }
+
+    /* Formulario responsive */
+    .search-form {
+      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+      padding: 25px;
+      border-radius: var(--border-radius);
+      border: 2px solid var(--secondary-color);
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 8px;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+    }
+
+    .form-control {
+      border-radius: 8px;
+      border: 2px solid #dee2e6;
+      padding: 12px 15px;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.2rem rgba(30, 47, 140, 0.25);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--hover-color) 100%);
+      border: none;
+      padding: 12px 30px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--hover-color) 0%, var(--primary-color) 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(30, 47, 140, 0.3);
+    }
+
+    .btn-home {
+      background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+      transition: all 0.3s ease;
+    }
+
+    .btn-home:hover {
+      background: linear-gradient(135deg, #495057 0%, #6c757d 100%);
+      transform: translateY(-2px);
+    }
+
+    /* Cards responsive */
+    .category-card {
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+      border-left: 5px solid var(--primary-color);
+      border-radius: var(--border-radius);
+      padding: 20px;
+      margin-bottom: 15px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .category-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      border-left-width: 8px;
+    }
+
+    .category-title {
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 8px;
+      font-size: clamp(1rem, 3vw, 1.1rem);
+    }
+
+    /* Resultados responsive */
+    #resultado {
+      margin-top: 25px;
+    }
+
+    .student-card {
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+      border-radius: var(--border-radius);
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: var(--shadow);
+      border: 1px solid #dee2e6;
+      transition: all 0.3s ease;
+    }
+
+    .student-card:hover {
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      transform: translateY(-3px);
+    }
+
+    .student-name {
+      color: var(--primary-color);
+      font-weight: 700;
+      font-size: clamp(1.2rem, 4vw, 1.5rem);
+      margin-bottom: 15px;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+      flex-wrap: wrap;
+    }
+
+    .info-item:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      font-weight: 600;
+      color: #666;
+      font-size: clamp(0.85rem, 2.5vw, 0.9rem);
+      margin-bottom: 5px;
+    }
+
+    .info-value {
+      font-weight: 500;
+      color: #333;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      text-align: right;
+    }
+
+    /* Footer responsive */
+    footer {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--hover-color) 100%);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      border-radius: var(--border-radius);
+      margin-top: 40px;
+      font-size: clamp(0.8rem, 2.5vw, 1rem);
+    }
+
+    /* Loader mejorado */
+    #loader {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      animation: fadeInLoader 0.3s ease-in;
+    }
+
+    .loader-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 250, 0.95) 100%);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      width: 420px;
+      max-width: 95%;
+      border: 2px solid rgba(30, 47, 140, 0.2);
+    }
+
+    .loader-image {
+      width: clamp(140px, 35vw, 180px);
+      height: clamp(140px, 35vw, 180px);
+      margin: 0 auto 25px;
+      display: block;
+      border-radius: 50%;
+      box-shadow: 0 8px 25px rgba(30, 47, 140, 0.3);
+      animation: float 2s ease-in-out infinite;
+      border: 4px solid white;
+      object-fit: contain;
+      background-color: #1E2F8C;
+      padding: 8px;
+    }
+
+    .spinner {
+      width: clamp(35px, 8vw, 50px);
+      height: clamp(35px, 8vw, 50px);
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+      position: relative;
+    }
+
+    .spinner::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      right: 2px;
+      bottom: 2px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      border-top: 2px solid var(--hover-color);
+      animation: spin 0.8s linear infinite reverse;
+    }
+
+    #mensajeCarga {
+      color: var(--primary-color);
+      font-size: clamp(0.9rem, 3vw, 1.1rem);
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: none;
+      min-height: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loading-subtitle {
+      color: #666;
+      font-size: clamp(0.7rem, 2vw, 0.85rem);
+      font-weight: 500;
+      opacity: 0.8;
+      font-style: italic;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background-color: #e9ecef;
+      border-radius: 2px;
+      margin: 15px 0;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-color), var(--hover-color));
+      border-radius: 2px;
+      animation: progressAnimation 2s ease-in-out infinite;
+    }
+
+    @keyframes fadeInLoader {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes float {
+      0%, 100% { 
+        transform: translateY(0px) scale(1);
+      }
+      50% { 
+        transform: translateY(-10px) scale(1.05);
+      }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes progressAnimation {
+      0% { transform: translateX(-100%); }
+      50% { transform: translateX(0%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* Mejoras de accesibilidad */
+    @media (prefers-reduced-motion: reduce) {
+      .spinner, .progress-fill {
+        animation: none;
+      }
+      
+      .loader-image {
+        animation: none;
+        transform: none;
+      }
+    }
+
+    /* Alertas responsive */
+    .alert {
+      border-radius: var(--border-radius);
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      border: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .alert-success {
+      background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+      color: #155724;
+    }
+
+    .alert-danger {
+      background: linear-gradient(135deg, #f8d7da 0%, #f1b0b7 100%);
+      color: #721c24;
+    }
+
+    /* Paginación con botones circulares */
+    .pagination-btn {
+      display: inline-block;
+      width: 35px;
+      height: 35px;
+      line-height: 35px;
+      text-align: center;
+      border-radius: 50%;
+      border: 2px solid var(--primary-color);
+      background-color: #fff;
+      color: var(--primary-color);
+      margin: 0 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .pagination-btn.active {
+      background-color: var(--primary-color);
+      color: #fff;
+    }
+
+    .pagination-btn:hover {
+      background-color: var(--hover-color);
+      color: #fff;
+      border-color: var(--hover-color);
+    }
+
+    /* Botón de detalles debajo de cada fila */
+    .detail-btn {
+      display: block;
+      margin-top: 10px;
+      padding: 8px 15px;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--hover-color) 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .detail-btn:hover {
+      background: linear-gradient(135deg, var(--hover-color) 0%, var(--primary-color) 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 2px 8px rgba(30, 47, 140, 0.3);
+    }
+
+    /* Estilos para los botones de ver más detalles de categorías */
+    .category-details-btn {
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: clamp(0.8rem, 2.5vw, 0.85rem);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .category-details-btn:hover {
+      background: linear-gradient(135deg, #20c997 0%, #28a745 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    }
+
+    .category-details-btn:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.25);
+    }
+
+    /* Contenido expandible de detalles */
+    .category-details {
+      margin-top: 15px;
+      padding: 15px;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-radius: 8px;
+      border-left: 4px solid var(--primary-color);
+      display: none;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    .category-details.show {
+      display: block;
+    }
+
+    .category-details h6 {
+      color: var(--primary-color);
+      font-weight: 700;
+      margin-bottom: 10px;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+    }
+
+    .category-details ul {
+      margin-bottom: 10px;
+      padding-left: 20px;
+    }
+
+    .category-details li {
+      margin-bottom: 5px;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+      line-height: 1.4;
+    }
+
+    .category-details .highlight {
+      background-color: #fff3cd;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Media queries para tablets */
+    @media (max-width: 768px) {
+      .main-container {
+        padding: 10px;
+      }
+      .content-wrapper {
+        padding: 15px;
+      }
+      .search-form {
+        padding: 20px;
+      }
+      .category-card {
+        padding: 15px;
+      }
+      .student-card {
+        padding: 20px;
+      }
+      .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .info-value {
+        text-align: left;
+        margin-top: 5px;
+      }
+    }
+
+    /* Media queries para móviles (incluyendo iPhone 11) */
+    @media (max-width: 480px) {
+      .main-container {
+        padding: 5px;
+        width: 100%;
+        margin: 0;
+      }
+
+      .content-wrapper {
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+      }
+
+      .search-form {
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+      }
+
+      .form-control {
+        padding: 10px;
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+
+      .btn-primary {
+        padding: 12px;
+        font-size: 16px;
+        margin-top: 10px;
+      }
+
+      .category-card {
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+      }
+
+      .table {
+        font-size: 14px;
+      }
+
+      .table th, .table td {
+        padding: 8px;
+      }
+
+      .detail-btn {
+        width: 100%;
+        font-size: 14px;
+      }
+    }
+
+    /* Ajuste específico para iPhone 11 (aproximadamente 414px de ancho lógico) */
+    @media (max-width: 435px) and (min-width: 375px) {
+      .search-form .col-md-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-bottom: 10px;
+      }
+
+      .btn-primary {
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      #historialLista .list-group-item {
+        font-size: 14px;
+        padding: 8px;
+      }
+
+      .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main-container">
+    <a class="btn btn-home" href="https://sites.google.com/uc.edu.py/creditosacademicosdei/inicio?authuser=0">🏠 Volver al Inicio</a>
+
+    <div class="content-wrapper card mb-3">
+      <img class="card-img-top mx-auto" src="https://i.imgur.com/A5gWkLy.jpg" alt="Encabezado DEI" style="max-width: 100%; height: auto;">
+      <div class="card-body text-center">
+        <small class="text-muted">Filipenses 4:13 - "Todo lo puedo en Cristo que me fortalece"</small>
+      </div>
+    </div>
+
+    <h5 class="mt-3">🔎 Consultar Créditos</h5>
+    <div class="row search-form mb-3">
+      <div class="col-md-6 mb-2">
+        <label for="matricula" class="form-label">Matrícula</label>
+        <input type="text" class="form-control" id="matricula" placeholder="Ingresa tu matrícula Ej: Y00112" onkeydown="if(event.keyCode==13) buscarCreditos()" autocomplete="off">
+        <small id="matriculaError" class="text-danger d-none">La matrícula debe ser alfanumérica (sin espacios ni símbolos).</small>
+      </div>
+      
+      <div class="col-md-6 mb-2">
+        <label for="apellido" class="form-label">Apellido</label>
+        <input type="text" class="form-control" id="apellido" placeholder="Ingresa tu apellido Ej: Villalba" onkeydown="if(event.keyCode==13) buscarCreditos()" autocomplete="off">
+        <small id="apellidoError" class="text-danger d-none">Ingrese al menos 3 letras para buscar por apellido.</small>
+      </div>
+      
+      <div class="col-12 mt-2">
+        <button class="btn btn-primary" id="btnBuscar" onclick="buscarCreditos()">Buscar</button>
+      </div>
+      <div id="historial" class="mt-3">
+        <h6>🕘 Búsquedas recientes</h6>
+        <ul class="list-group" id="historialLista"></ul>
+      </div>
+    </div>
+
+    <div id="loader" aria-label="Cargando datos" role="dialog" aria-live="polite">
+      <div class="loader-content">
+        <img src="https://i.gifer.com/5SvD.gif" alt="Cargando..." class="loader-image">
+        <div class="spinner" aria-hidden="true"></div>
+        <p id="mensajeCarga" aria-live="polite"></p>
+        <div class="progress-bar" aria-hidden="true">
+          <div class="progress-fill"></div>
+        </div>
+        <p class="loading-subtitle">Por favor, espera un momento...</p>
+      </div>
+    </div>
+
+    <div id="resultado" class="content-wrapper"></div>
+
+    <h1 class="mt-5 mb-4">Categorías de Créditos Académicos</h1>
+
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <div class="card category-card">
+          <div class="card-body">
+            <h5 class="card-title category-title">📘 Cursos Optativos (A)</h5>
+            <p class="card-text">Asignaturas cursadas en carreras afines de la misma Facultad, otras facultades de la Universidad o universidades nacionales o extranjeras.</p>
+            <button class="category-details-btn" onclick="toggleDetails('details-a')">Ver más detalles</button>
+            <div id="details-a" class="category-details">
+              <h6>📋 Requisitos y Especificaciones:</h6>
+              <ul>
+                <li><span class="highlight">Máximo 12 créditos</span> en esta categoría</li>
+                <li>Asignaturas de <strong>carreras afines</strong> de la misma Facultad</li>
+                <li>Materias de <strong>otras facultades</strong> de la Universidad Católica</li>
+                <li>Cursos de <strong>universidades nacionales o extranjeras</strong> reconocidas</li>
+              
+              </ul>
+              </ul>
+              <h6>📝 Actividades recomendadas:</h6>
+              <ul>
+                <li>Asignaturas DEI: 1 crédito por cada 16 horas cátedras</li>
+                <li>Asignaturas DICIA: 1 crédito por cada 32 horas cátedras</li>
+                <li>Cursos Externos u online: 1 crédito por cada 48 horas reloj</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card category-card">
+          <div class="card-body">
+            <h5 class="card-title category-title">🎓 Congresos, Seminarios y Conferencias (B)</h5>
+            <p class="card-text">Eventos académicos organizados por instituciones competentes que aporten a la formación del ingeniero/a con aprobación del DEI.</p>
+            <button class="category-details-btn" onclick="toggleDetails('details-b')">Ver más detalles</button>
+            <div id="details-b" class="category-details">
+              <h6>📋 Requisitos y Especificaciones:</h6>
+              <ul>
+                <li><span class="highlight">Máximo 4 créditos</span> en esta categoría</li>
+                <li>Eventos organizados por <strong>instituciones reconocidas</strong></li>
+                <li>Temática relacionada con la <strong>ingeniería</strong> o áreas afines</li>
+                <li>Certificado de participación</li>
+              </ul>
+              <h6>📝Actividades recomendadas:</h6>
+              <ul>
+                <li>Tigo Campus Party: 1 crédito por asistencia </li>
+                <li>Congreso Innotec: 2 créditos por asistencia</li>
+                <li>Congreso Innotec: 3 créditos por Hackathon</li>
+                <li>JIT-CITA: 1 crédito por asistencia a las charlas</li>
+                <li>JIT-CITA: 1 crédito por asistencia a los tutoriales</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card category-card">
+          <div class="card-body">
+            <h5 class="card-title category-title">🧑‍🏫 Ayudantías de Cátedra (C)</h5>
+            <p class="card-text">Apoyo a actividades docentes, principalmente en prácticas y laboratorios, bajo la supervisión del Departamento.</p>
+            <button class="category-details-btn" onclick="toggleDetails('details-c')">Ver más detalles</button>
+            <div id="details-c" class="category-details">
+              <h6>📋 Requisitos y Especificaciones:</h6>
+              <ul>
+                <li><span class="highlight">Máximo 10 créditos</span> en esta categoría</li>
+                <li>Supervisión del <strong>profesor titular</strong></li>
+                <li>Mínimo <strong>16 horas cátedras</strong> de actividad por 1 crédito</li>
+                <li>Apoyo en prácticas, laboratorios o tutorías</li>
+                <li>Evaluación satisfactoria del desempeño</li>
+              </ul>
+              <h6>📝 Procedimiento:</h6>
+              <ul>
+                <li>1- Se debe solicitar la ayudantía a través del formulario correspondiente habilitado cada semestre en el classroom.</li>
+                <li>2- Una vez aprobada la ayudantía, se debe coordinar con el profesor titular las actividades a realizar.</li>
+                <li>3- Una vez finalizada se debe elaborar un informe de actividades realizadas con las horas cátedra correspondientes firmada por el docente</li>
+                <li>4- Se debe solicitar la asignación de créditos con el formulario de solicitud de créditos.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card category-card">
+          <div class="card-body">
+            <h5 class="card-title category-title">🤝 Extensión Universitaria (D)</h5>
+            <p class="card-text">Actividades humanísticas, educativas o tecnológicas que fortalecen la identidad cristiana y aportan al desarrollo profesional.</p>
+            <button class="category-details-btn" onclick="toggleDetails('details-d')">Ver más detalles</button>
+            <div id="details-d" class="category-details">
+              <h6>📋 Requisitos y Especificaciones:</h6>
+              <ul>
+                <li><span class="highlight">Máximo 2 créditos</span> en esta categoría</li>
+                <li>Actividades de <strong>responsabilidad social</strong></li>
+                <li>Proyectos de <strong>voluntariado</strong> educativo o tecnológico</li>
+                <li>Fortalecimiento de la <strong>identidad cristiana</strong></li>
+              </ul>
+              <h6>📝 Actividades sugeridas:</h6>
+              <ul>
+                <li>Un techo para mi país: 1 crédito por asistencia</li>
+                <li>Colecta de alimentos: 1 crédito</li>
+                <li>Voluntariado en Teletón: 1 crédito</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card category-card">
+          <div class="card-body">
+            <h5 class="card-title category-title">🛠️ Pasantías Supervisadas (E)</h5>
+            <p class="card-text">Prácticas profesionales, de investigación, de servicios, o en proyectos concretos, conforme a la legislación</p>
+            <button class="category-details-btn" onclick="toggleDetails('details-e')">Ver más detalles</button>
+            <div id="details-e" class="category-details">
+              <h6>📋 Requisitos y Especificaciones:</h6>
+              <ul>
+                <li><span class="highlight">Máximo 10 créditos</span> en esta categoría</li>
+                <li>Las Pasantías son obligatorias y reuieren un mínimo de 7 créditos computados</li>
+                <li>Prácticas en <strong>empresas o instituciones</strong> reconocidas</li>
+                <li>Supervisión académica del <strong>DEI</strong></li>
+                <li>Mínimo <strong>48 horas reloj</strong> por crédito</li>
+                <li>Actividades relacionadas con la carrera</li>
+              </ul>
+              <h6>📝 Documentación Requerida:</h6>
+              <ul>
+                <li>Aprobación de Propuesta de Pasantías</li>
+                <li>Informe Final de actividades realizadas con la carga horaria correspondiente</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card category-card">
+          <div class="card-body">
+            <h5 class="card-title category-title">📚 Otras Actividades (F)</h5>
+            <p class="card-text">Toda otra actividad validada por el Comité del DEI que contribuya a la formación integral del profesional.</p>
+            <button class="category-details-btn" onclick="toggleDetails('details-f')">Ver más detalles</button>
+            <div id="details-f" class="category-details">
+              <h6>📋 Requisitos y Especificaciones:</h6>
+              <ul>
+                <li><span class="highlight">Máximo 4 créditos</span> en esta categoría</li>
+                <li>Actividades <strong>no contempladas</strong> en otras categorías</li>
+                <li>Validación previa del <strong>Comité del DEI</strong></li>
+                <li>Contribución a la <strong>formación integral</strong></li>
+                <li>Evaluación caso por caso</li>
+              </ul>
+              <h6>📝 Ejemplos de Actividades:</h6>
+              <ul>
+                <li>Cursos ECI en Buenos Aires: 2 créditos por cada curso aprobado y certificado.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 mb-3">
+        <div class="card category-card">
+          <div class="card-body">
+            <h5 class="card-title category-title">🇬🇧 Suficiencia en Inglés</h5>
+            <p class="card-text">Requisito obligatorio. Se debe alcanzar al menos nivel B1 (Intermedio) según el Marco Común Europeo de Referencia (MCER).</p>
+            <button class="category-details-btn" onclick="toggleDetails('details-ingles')">Ver más detalles</button>
+            <div id="details-ingles" class="category-details">
+              <h6>📋 Requisitos y Especificaciones:</h6>
+              <ul>
+                <li><span class="highlight">Nivel B1 mínimo</span> según MCER</li>
+                <li>Examen oficial reconocido internacionalmente</li>
+                <li>Certificación de institutos de idiomas acreditados</li>
+                <li><strong>Requisito obligatorio</strong> para la graduación</li>
+              </ul>
+              <h6>📝 Opciones de Certificación:</h6>
+              <ul>
+                <li>CCPA online con Versant Test </li>
+                <li>Duolingo Test online</li>
+                <li>Certificado del Anglo</li>
+              </ul>
+              <h6>💡 Recomendaciones:</h6>
+              <ul>
+                <li>Obtener la suficiencia en Inglés en los primeros semestres</li>
+                <li>Considerar que es obligatorio y Requisito para la presentación de Tema de PFC</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-wrapper mt-5">
+      <h2 class="text-center mb-4" style="color: var(--primary-color);">❓ Preguntas Frecuentes</h2>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <div class="faq-item p-3" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 8px; border-left: 4px solid var(--primary-color);">
+            <h6 style="color: var(--primary-color); font-weight: bold;">🎯 ¿Cuántos créditos necesito para graduarme?</h6>
+            <p style="margin-bottom: 0; font-size: 0.9rem;">Necesitas <strong>20 créditos académicos</strong> distribuidos en las categorías A-F, más la <strong>suficiencia en inglés</strong>.</p>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="faq-item p-3" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 8px; border-left: 4px solid var(--primary-color);">
+            <h6 style="color: var(--primary-color); font-weight: bold;">⏰ ¿Cuándo debo completar los créditos?</h6>
+            <p style="margin-bottom: 0; font-size: 0.9rem;">Antes de presentar tu propuesta de PFC. Es recomendable ir completándolos durante la carrera.</p>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="faq-item p-3" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 8px; border-left: 4px solid var(--primary-color);">
+            <h6 style="color: var(--primary-color); font-weight: bold;">📝 ¿Cómo valido mis créditos?</h6>
+            <p style="margin-bottom: 0; font-size: 0.9rem;">Presenta la documentación requerida al DEI a través de los formularios online correspondientes.</p>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="faq-item p-3" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 8px; border-left: 4px solid var(--primary-color);">
+            <h6 style="color: var(--primary-color); font-weight: bold;">🔍 ¿No aparecen mis créditos?</h6>
+            <p style="margin-bottom: 0; font-size: 0.9rem;">Verifica el estado de tu solicitud en la mesa de entrada DEI Form.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="row text-center">
+        <div class="col-md-6">
+          <strong>📧 Contacto DEI</strong><br>
+          <a href="mailto:dei@uc.edu.py" class="text-white">dei@uc.edu.py</a>
+        </div>
+        <div class="col-md-6">
+          <strong>🛠️ Desarrollado por</strong><br>
+          <a href="mailto:omar.irrazabal@uc.edu.py" class="text-white">Omar Irrazábal - OI 2025</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    function buscarCreditos() {
+      const matricula = document.getElementById("matricula").value.trim();
+      const apellido = document.getElementById("apellido").value.trim();
+      const matriculaError = document.getElementById("matriculaError");
+      const apellidoError = document.getElementById("apellidoError");
+      const btnBuscar = document.getElementById("btnBuscar");
+      const loader = document.getElementById("loader");
+
+      matriculaError.classList.add("d-none");
+      apellidoError.classList.add("d-none");
+
+      const matriculaRegex = /^[a-zA-Z0-9]+$/;
+      if (matricula !== "" && !matriculaRegex.test(matricula)) {
+        matriculaError.classList.remove("d-none");
+        return;
+      }
+
+      if (apellido !== "" && apellido.length < 3) {
+        apellidoError.classList.remove("d-none");
+        return;
+      }
+
+      if (matricula === "" && apellido === "") {
+        matriculaError.textContent = "Por favor ingrese una matrícula o apellido para buscar.";
+        matriculaError.classList.remove("d-none");
+        return;
+      }
+
+      // Mostrar el loader cubriendo toda la pantalla
+      loader.style.display = "block";
+
+      const mensajeCarga = document.getElementById("mensajeCarga");
+      const mensajes = [
+        "🔍 Buscando en la base de datos...",
+        "� Procesando información académica...", 
+        "🧠 Analizando créditos del DEI...",
+        "� Consultando registros estudiantiles...",
+        "✨ Organizando los resultados...",
+        "📡 Sincronizando con el servidor...",
+        "🔐 Verificando permisos de acceso...",
+        "⚡ Casi listo, últimos detalles...",
+      ];
+      let index = 0;
+      const interval = setInterval(() => {
+        mensajeCarga.textContent = mensajes[index];
+        index = (index + 1) % mensajes.length;
+      }, 1200);
+
+      if (matricula) {
+        google.script.run
+          .withSuccessHandler(function(result) {
+            clearInterval(interval);
+            hideLoader();
+            displayResults(result);
+            guardarEnHistorial("matricula", matricula);
+          })
+          .withFailureHandler(function(error) {
+            clearInterval(interval);
+            hideLoader();
+            document.getElementById("resultado").innerHTML = `<div class="alert alert-danger">Error: ${error.message || 'No se encontraron resultados'}</div>`;
+          })
+          .buscarCreditos(matricula);
+      } else {
+        google.script.run
+          .withSuccessHandler(function(results) {
+            clearInterval(interval);
+            hideLoader();
+            displayResults(results);
+            guardarEnHistorial("apellido", apellido);
+          })
+          .withFailureHandler(function(error) {
+            clearInterval(interval);
+            hideLoader();
+            document.getElementById("resultado").innerHTML = `<div class="alert alert-danger">Error: ${error.message || 'No se encontraron resultados'}</div>`;
+          })
+          .buscarCreditosPorApellido(apellido);
+      }
+    }
+
+    let allResults = [];
+    let currentPage = 1;
+    const resultsPerPage = 5;
+
+    function displayResults(results) {
+      const resultadoDiv = document.getElementById("resultado");
+      allResults = Array.isArray(results) ? results : [results];
+      currentPage = 1;
+      renderTablaPaginada();
+    }
+
+    function renderTablaPaginada() {
+      const resultadoDiv = document.getElementById("resultado");
+
+      if (!allResults || allResults.length === 0) {
+        resultadoDiv.innerHTML = `
+          <div class="alert alert-warning">
+            <h5>📭 No se encontraron resultados</h5>
+            <p>No se encontró información de créditos para esta búsqueda.</p>
+            <hr>
+            <h6>💡 Posibles causas:</h6>
+            <ul>
+              <li>La matrícula o apellido no está registrado</li>
+              <li>Aún no se han cargado créditos académicos</li>
+              <li>Error en la escritura del apellido</li>
+            </ul>
+            <p class="mb-0"><strong>Contacta al DEI</strong> si crees que debería aparecer información.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const totalPages = Math.ceil(allResults.length / resultsPerPage);
+      const start = (currentPage - 1) * resultsPerPage;
+      const end = start + resultsPerPage;
+      const datosPagina = allResults.slice(start, end);
+
+      const esURLValida = (url) => {
+        try {
+          const parsed = new URL(url);
+          return ['http:', 'https:'].includes(parsed.protocol);
+        } catch (e) {
+          return false;
+        }
+      };
+
+      const limpiarHTML = (htmlString) => {
+        const div = document.createElement('div');
+        div.innerHTML = htmlString;
+        return div.textContent || div.innerText || '';
+      };
+
+      const construirFila = (data) => {
+        const nombreLimpio = limpiarHTML(data.nombreAlumno || '');
+        const enlace = typeof data.enlaceAlumno === 'string' ? data.enlaceAlumno.trim() : '';
+        const enlaceValido = esURLValida(enlace);
+        const detalleHtml = enlaceValido ? `<a href="${enlace}" target="_blank" class="detail-btn">Ver Detalles</a>` : '';
+
+        // Función para crear barra de progreso
+        const crearBarra = (actual, maximo, categoria) => {
+          const porcentaje = Math.min((actual / maximo) * 100, 100);
+          const color = porcentaje === 100 ? '#28a745' : porcentaje >= 75 ? '#ffc107' : '#dc3545';
+          return `
+            <div style="position: relative;">
+              <span style="font-weight: bold;">${actual}/${maximo}</span>
+              <div style="width: 100%; height: 6px; background-color: #e9ecef; border-radius: 3px; margin-top: 3px;">
+                <div style="width: ${porcentaje}%; height: 100%; background-color: ${color}; border-radius: 3px; transition: width 0.3s ease;"></div>
+              </div>
+            </div>
+          `;
+        };
+
+        return `
+          <tr>
+            <td>${nombreLimpio}</td>
+            <td>${data.carrera || ''}</td>
+            <td style="text-align: center; color: ${data.AprobacionSI === 'Sí' ? '#28a745' : '#dc3545'}; font-weight: bold;">
+              ${data.AprobacionSI || 'No'} ${data.AprobacionSI === 'Sí' ? '✅' : '❌'}
+            </td>
+            <td>${crearBarra(data.MateriasCursos || 0, 12, 'A')}</td>
+            <td>${crearBarra(data.Congresos || 0, 4, 'B')}</td>
+            <td>${crearBarra(data.AyudantiasPasantias || 0, 10, 'C')}</td>
+            <td>${crearBarra(data.Investigacion || 0, 2, 'D')}</td>
+            <td>${crearBarra(data.Extension || 0, 10, 'E')}</td>
+            <td>${crearBarra(data.Otros || 0, 4, 'F')}</td>
+            <td style="font-weight: bold; color: ${(data.cantidadCreditoAlumnoTotal || 0) >= 30 ? '#28a745' : '#dc3545'};">
+              ${data.cantidadCreditoAlumnoTotal || 0}/30
+              ${(data.cantidadCreditoAlumnoTotal || 0) >= 30 ? ' ✅' : ` (Faltan ${30 - (data.cantidadCreditoAlumnoTotal || 0)})`}
+            </td>
+          </tr>
+          ${detalleHtml ? `<tr><td colspan="10">${detalleHtml}</td></tr>` : ''}
+        `;
+      };
+
+      let tableHtml = `
+        <div class="table-responsive mt-4">
+          <table class="table table-bordered table-striped" style="background-color: #C8CBD4; color: #000;">
+            <thead style="background-color: #AEB1BD; font-weight: bold;">
+              <tr>
+                <th>Alumno/a</th>
+                <th>Carrera</th>
+                <th>Suficiencia en Inglés (SI)</th>
+                <th>Cursos Optativos (A) máx: 12</th>
+                <th>Conferencias/Congresos/Seminarios (B) máx: 4</th>
+                <th>Ayudantías de Cátedra (C) máx: 10</th>
+                <th>Extensión Universitaria (D) máx: 2</th>
+                <th>Pasantías Supervizadas (E) máx: 10</th>
+                <th>Otros (F) máx: 4</th>
+                <th>Total Créditos</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${datosPagina.map(construirFila).join('')}
+            </tbody>
+          </table>
+        </div>
+        <div class="text-center">
+          ${renderPaginacion(totalPages)}
+        </div>
+      `;
+
+      resultadoDiv.innerHTML = tableHtml;
+    }
+
+    function renderPaginacion(totalPages) {
+      let botones = '';
+      for (let i = 1; i <= totalPages; i++) {
+        botones += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="irAPagina(${i})">${i}</button>`;
+      }
+      return botones;
+    }
+
+    function irAPagina(pagina) {
+      currentPage = pagina;
+      renderTablaPaginada();
+    }
+
+    function guardarEnHistorial(tipo, valor) {
+      const clave = `historial-${tipo}`;
+      let historial = JSON.parse(localStorage.getItem(clave)) || [];
+      historial = historial.filter(item => item !== valor);
+      historial.unshift(valor);
+      historial = historial.slice(0, 3);
+      localStorage.setItem(clave, JSON.stringify(historial));
+      mostrarHistorial();
+    }
+
+    function mostrarHistorial() {
+      const historialDiv = document.getElementById("historialLista");
+      historialDiv.innerHTML = '';
+      const matriculas = JSON.parse(localStorage.getItem("historial-matricula")) || [];
+      const apellidos = JSON.parse(localStorage.getItem("historial-apellido")) || [];
+      const todos = [...matriculas.map(m => ({ tipo: 'matricula', valor: m })), ...apellidos.map(a => ({ tipo: 'apellido', valor: a }))];
+
+      todos.slice(0, 3).forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item list-group-item-action';
+        li.textContent = `${item.valor} (${item.tipo})`;
+        li.style.cursor = 'pointer';
+        li.onclick = () => {
+          if (item.tipo === 'matricula') {
+            document.getElementById("matricula").value = item.valor;
+            document.getElementById("apellido").value = '';
+          } else {
+            document.getElementById("apellido").value = item.valor;
+            document.getElementById("matricula").value = '';
+          }
+          buscarCreditos();
+        };
+        historialDiv.appendChild(li);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', mostrarHistorial);
+
+    // Función para mostrar/ocultar detalles de categorías
+    function toggleDetails(detailsId) {
+      const detailsElement = document.getElementById(detailsId);
+      const button = event.target;
+      
+      if (detailsElement.classList.contains('show')) {
+        detailsElement.classList.remove('show');
+        button.textContent = 'Ver más detalles';
+        button.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+      } else {
+        detailsElement.classList.add('show');
+        button.textContent = 'Ocultar detalles';
+        button.style.background = 'linear-gradient(135deg, #dc3545 0%, #fd7e14 100%)';
+      }
+    }
+
+    // Función para ocultar loader con animación suave
+    function hideLoader() {
+      const loader = document.getElementById("loader");
+      loader.style.opacity = "0";
+      setTimeout(() => {
+        loader.style.display = "none";
+      }, 300);
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
