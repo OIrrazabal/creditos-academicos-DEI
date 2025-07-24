@@ -12,26 +12,30 @@ Esta aplicación permite a estudiantes y administrativos consultar de manera rá
 - 📊 **Visualización intuitiva**: Barras de progreso por categoría
 - 📱 **Diseño responsivo**: Optimizado para dispositivos móviles
 - 🎨 **Interfaz moderna**: Diseño atractivo con gradientes y animaciones
-- 📚 **Información completa**: Detalles de cada categoría de créditos
+- � **Exportación a PDF**: Generación de informes en formato A4 vertical
+- �📚 **Información completa**: Detalles de cada categoría de créditos
 - ❓ **FAQ integrado**: Preguntas frecuentes para estudiantes
 - 🕘 **Historial de búsquedas**: Búsquedas recientes guardadas localmente
 
 ## 🎯 Funcionalidades
 
 ### Para Estudiantes
-- ✅ Consulta rápida de estado de créditos
-- 📈 Indicadores visuales de progreso (20 créditos totales)
-- 🇬🇧 Verificación de suficiencia en inglés
-- 📝 Información detallada de cada categoría
-- 💡 Preguntas frecuentes y orientación
+- Consulta rápida de estado de créditos
+- Indicadores visuales de progreso (20 créditos totales)
+- Verificación de suficiencia en inglés
+- Exportación de informes en formato PDF
+- Información detallada de cada categoría
+- Preguntas frecuentes y orientación
 
 ## 📂 Estructura del Proyecto
 
 ```
 CreditosDEIGoogle/
 ├── Page.html          # Interfaz principal del usuario
+├── JavaScript.html    # Código JavaScript del lado del cliente
+├── ConfigJS.html      # Configuración centralizada del lado del cliente
+├── Stylesheet.html    # Estilos CSS para la interfaz
 ├── codigo.js          # Lógica del servidor (controladores)
-├── linkURL.js         # Utilidades para manejo de URLs
 ├── appsscript.json    # Configuración del proyecto Google Apps Script
 ├── .clasp.json        # Configuración de clasp CLI
 └── README.md          # Documentación del proyecto
@@ -42,6 +46,8 @@ CreditosDEIGoogle/
 - **Frontend**: HTML5, CSS3, JavaScript ES6
 - **Backend**: Google Apps Script
 - **Framework CSS**: Bootstrap 5.3.0
+- **Bibliotecas JS**: jsPDF, html2canvas para exportación a PDF
+- **Arquitectura**: Separación cliente-servidor, código modular
 - **Fuentes**: Google Fonts (Segoe UI)
 - **Iconos**: Emojis Unicode para mejor compatibilidad
 
