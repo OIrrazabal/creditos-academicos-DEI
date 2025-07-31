@@ -1,4 +1,15 @@
 /**
+ * Página de consulta de créditos (pública)
+ */
+function doGet(e) {
+  return HtmlService.createTemplateFromFile('Page')
+    .evaluate()
+    .setTitle('Consulta Créditos DEI')
+    .setFaviconUrl('https://uc.edu.py/favicon.ico')
+    .addMetaTag('viewport', 'width=device-width, initial-scale=1');
+}
+
+/**
  * Script principal de Google Apps Script para el Sistema de Créditos DEI
  * Este archivo solo contiene código que se ejecuta en el servidor
  * Utiliza la biblioteca gestionCreditosDEI para las funciones de búsqueda
@@ -60,7 +71,7 @@ function doGet() {
 }
 
 /**
- * Incluye archivos HTML como plantillas
+ * Incluye archivos HTML como plantillas.
  * @param {string} filename - Nombre del archivo a incluir
  * @return {string} - Contenido HTML del archivo
  */

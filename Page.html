@@ -9,9 +9,16 @@
   <?!= include('Stylesheet'); ?>
 </head>
 
-<body>
-  <div class="main-container">
-    <a class="btn btn-home" href="https://sites.google.com/uc.edu.py/creditosacademicosdei/inicio?authuser=0">🏠 Volver al Inicio</a>
+
+  <body>
+  <!-- Botón fijo en la esquina superior izquierda en web, centrado en mobile -->
+  <div class="position-absolute w-100" style="top: 24px; left: 0; z-index: 1050;">
+    <div class="d-flex justify-content-center justify-content-md-start ps-md-4">
+      <a class="btn btn-home shadow" href="https://sites.google.com/uc.edu.py/creditosacademicosdei/inicio?authuser=0">🏠 Volver al Inicio</a>
+    </div>
+  </div>
+
+  <div class="main-container pt-5">
 
     <div class="content-wrapper card mb-3">
       <img class="card-img-top mx-auto" src="https://i.imgur.com/A5gWkLy.jpg" alt="Encabezado DEI" style="max-width: 100%; height: auto;">
@@ -279,8 +286,8 @@
           <a href="mailto:dei@uc.edu.py" class="text-white">dei@uc.edu.py</a>
         </div>
         <div class="col-md-6">
-          <strong>🛠️ Desarrollado por</strong><br>
-          <a href="mailto:omar.irrazabal@uc.edu.py" class="text-white">Omar Irrazábal - OI 2025</a>
+          <strong>🛠️ Desarrollado con ❤️ por</strong><br>
+          <a href="mailto:omar.irrazabal@uc.edu.py" class="text-white">Omar Irrazabal OI- julio 2025</a>
         </div>
       </div>
     </footer>

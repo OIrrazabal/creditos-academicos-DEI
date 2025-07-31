@@ -1,6 +1,7 @@
+
 # 🎓 Sistema de Consulta de Créditos Académicos DEI
 
-Sistema web desarrollado en Google Apps Script para consultar y visualizar los créditos académicos de estudiantes del Departamento de Electrónica e Informática (DEI) de la Universidad Católica "Nuestra Señora de la Asunción".
+Sistema web desarrollado en Google Apps Script para consultar y visualizar los créditos académicos de estudiantes del Departamento de Electrónica e Informática (DEI) de la Universidad Católica "Nuestra Señora de la Asunción". Este proyecto contiene únicamente el módulo de consulta para estudiantes y administrativos.
 
 ## 📋 Descripción
 
@@ -12,10 +13,9 @@ Esta aplicación permite a estudiantes y administrativos consultar de manera rá
 - 📊 **Visualización intuitiva**: Barras de progreso por categoría
 - 📱 **Diseño responsivo**: Optimizado para dispositivos móviles
 - 🎨 **Interfaz moderna**: Diseño atractivo con gradientes y animaciones
-- � **Exportación a PDF**: Generación de informes en formato A4 vertical
-- �📚 **Información completa**: Detalles de cada categoría de créditos
-- ❓ **FAQ integrado**: Preguntas frecuentes para estudiantes
-- 🕘 **Historial de búsquedas**: Búsquedas recientes guardadas localmente
+ - 📝 **Exportación a PDF**: Generación de informes en formato A4 vertical
+ - 📚 **Información completa**: Detalles de cada categoría de créditos
+ - 🕘 **Historial de búsquedas**: Búsquedas recientes guardadas localmente
 
 ## 🎯 Funcionalidades
 
@@ -25,7 +25,7 @@ Esta aplicación permite a estudiantes y administrativos consultar de manera rá
 - Verificación de suficiencia en inglés
 - Exportación de informes en formato PDF
 - Información detallada de cada categoría
-- Preguntas frecuentes y orientación
+ 
 
 ## 📂 Estructura del Proyecto
 
@@ -33,11 +33,9 @@ Esta aplicación permite a estudiantes y administrativos consultar de manera rá
 CreditosDEIGoogle/
 ├── Page.html          # Interfaz principal del usuario
 ├── JavaScript.html    # Código JavaScript del lado del cliente
-├── ConfigJS.html      # Configuración centralizada del lado del cliente
-├── Stylesheet.html    # Estilos CSS para la interfaz
-├── codigo.js          # Lógica del servidor (controladores)
+├── codigo.js          # Lógica del servidor (Apps Script)
+├── linkURL.js         # Lógica adicional para enlaces
 ├── appsscript.json    # Configuración del proyecto Google Apps Script
-├── .clasp.json        # Configuración de clasp CLI
 └── README.md          # Documentación del proyecto
 ```
 
@@ -68,7 +66,7 @@ CreditosDEIGoogle/
 2. **Configurar Google Apps Script**
    - Crear nuevo proyecto en [script.google.com](https://script.google.com)
    - Subir archivos del proyecto
-   - Configurar biblioteca externa `gestionCreditosDEI`
+   - Configurar acceso a la hoja de cálculo de créditos
 
 3. **Configurar permisos**
    - Autorizar acceso a Google Sheets
@@ -98,7 +96,7 @@ clasp push
 
 ### Variables de entorno
 - Configurar acceso a hojas de cálculo de datos
-- Establecer permisos de biblioteca externa
+ 
 
 ## 📱 Responsive Design
 

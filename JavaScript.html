@@ -224,10 +224,22 @@ function mostrarErrorBusqueda(error) {
  * Valida si una URL es válida
  */
 function esURLValida(url) {
+  if (!url || typeof url !== 'string') return false;
+  url = url.trim();
+  // Acepta enlaces de Google Drive aunque tengan parámetros extra
+  var driveRegex = /^https?:\/\/(drive|docs)\.google\.com\//i;
   try {
     var parsed = new URL(url);
-    return ['http:', 'https:'].includes(parsed.protocol);
+    if (['http:', 'https:'].includes(parsed.protocol)) {
+      // Si es Google Drive, lo acepta aunque tenga parámetros
+      if (driveRegex.test(url)) return true;
+      // Si es otro enlace, debe ser válido
+      return true;
+    }
+    return false;
   } catch (e) {
+    // Si no se puede parsear, pero parece Google Drive, lo acepta
+    if (driveRegex.test(url)) return true;
     return false;
   }
 }
@@ -275,7 +287,12 @@ function construirFila(data) {
   var nombreLimpio = limpiarHTML(data.nombreAlumno || '');
   var enlace = typeof data.enlaceAlumno === 'string' ? data.enlaceAlumno.trim() : '';
   var enlaceValido = esURLValida(enlace);
-  var detalleHtml = enlaceValido ? '<a href="' + enlace + '" target="_blank" class="detail-btn">Ver Detalles</a>' : '';
+  var detalleHtml = '';
+  if (enlaceValido) {
+    detalleHtml = '<a href="' + enlace + '" target="_blank" class="detail-btn btn btn-primary">Ver Detalles</a>';
+  } else {
+    detalleHtml = '<button class="detail-btn btn btn-secondary" disabled style="opacity:0.7;cursor:not-allowed;">Sin detalles disponibles</button>';
+  }
   
   var totalCreditos = data.cantidadCreditoAlumnoTotal || 0;
   var creditosColor = totalCreditos >= 20 ? '#28a745' : '#dc3545';
@@ -306,7 +323,7 @@ function construirFila(data) {
         totalCreditos + '/20' + creditosTexto +
       '</td>' +
     '</tr>' +
-    (detalleHtml ? '<tr><td colspan="10">' + detalleHtml + '</td></tr>' : '');
+    '<tr><td colspan="10" class="text-center">' + detalleHtml + '</td></tr>';
 }
 
 /**
@@ -318,19 +335,21 @@ function renderTablaPaginada() {
   
   if (!resultadoDiv) return;
 
-  if (!allResults || allResults.length === 0) {
+  // Validación extendida: sin resultados, array vacío, o solo objetos vacíos
+  var datosValidos = Array.isArray(allResults) && allResults.some(function(obj) {
+    if (!obj || typeof obj !== 'object') return false;
+    // Considera vacío si no tiene nombre, carrera ni créditos
+    return Object.keys(obj).length > 0 && (obj.nombreAlumno || obj.carrera || obj.cantidadCreditoAlumnoTotal);
+  });
+
+  if (!allResults || allResults.length === 0 || !datosValidos) {
     resultadoDiv.innerHTML = 
-      '<div class="alert alert-warning">' +
-        '<h5>📭 No se encontraron resultados</h5>' +
-        '<p>No se encontró información de créditos para esta búsqueda.</p>' +
+      '<div class="alert alert-warning text-center">' +
+        '<h5>📭 Alumno no encontrado</h5>' +
+        '<p>No se encontró información de créditos para la matrícula ingresada.</p>' +
         '<hr>' +
-        '<h6>💡 Posibles causas:</h6>' +
-        '<ul>' +
-          '<li>La matrícula o apellido no está registrado</li>' +
-          '<li>Aún no se han cargado créditos académicos</li>' +
-          '<li>Error en la escritura del apellido</li>' +
-        '</ul>' +
-        '<p class="mb-0"><strong>Contacta al DEI</strong> si crees que debería aparecer información.</p>' +
+        '<p class="mb-0">Verifica que la matrícula esté correctamente escrita.<br>' +
+        'Si crees que es un error, contacta al DEI.</p>' +
       '</div>';
     return;
   }
@@ -339,6 +358,7 @@ function renderTablaPaginada() {
   var start = (currentPage - 1) * RESULTS_PER_PAGE;
   var end = start + RESULTS_PER_PAGE;
   var datosPagina = allResults.slice(start, end);
+
 
   // Obtenemos el nombre del alumno para el título del PDF
   var nombreAlumno = allResults.length > 0 ? limpiarHTML(allResults[0].nombreAlumno || 'Alumno') : 'Alumno';
