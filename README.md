@@ -11,11 +11,14 @@ Esta aplicación permite a estudiantes y administrativos consultar de manera rá
 
 - 🔍 **Búsqueda dual**: Por matrícula o apellido
 - 📊 **Visualización intuitiva**: Barras de progreso por categoría
-- 📱 **Diseño responsivo**: Optimizado para dispositivos móviles
+- 📱 **Diseño responsivo**: Optimizado para dispositivos móviles con vista de tarjetas
 - 🎨 **Interfaz moderna**: Diseño atractivo con gradientes y animaciones
- - 📝 **Exportación a PDF**: Generación de informes en formato A4 vertical
- - 📚 **Información completa**: Detalles de cada categoría de créditos
- - 🕘 **Historial de búsquedas**: Búsquedas recientes guardadas localmente
+- 📝 **Exportación a PDF**: Generación de informes en formato A4 vertical
+- 📚 **Información completa**: Detalles de cada categoría de créditos
+- 🕘 **Historial de búsquedas**: Búsquedas recientes guardadas localmente
+- 🔄 **Modos de vista**: Vista simplificada y completa intercambiables
+- 💳 **Vista móvil tipo tarjeta**: Diseño de tarjetas modernas para móviles
+- 🎨 **Alta legibilidad**: Texto negro sobre fondos claros en móvil
 
 ## 🎯 Funcionalidades
 
@@ -25,6 +28,15 @@ Esta aplicación permite a estudiantes y administrativos consultar de manera rá
 - Verificación de suficiencia en inglés
 - Exportación de informes en formato PDF
 - Información detallada de cada categoría
+- Vista adaptativa según dispositivo (tabla en desktop, tarjetas en móvil)
+
+### 📱 Vista Móvil Avanzada
+- **Tarjetas modernas**: Diseño tipo card con avatar personalizado
+- **Avatar con iniciales**: Círculo perfecto con las iniciales del estudiante
+- **Estados visuales**: Colores distintivos para aprobado/pendiente/incompleto
+- **Barras de progreso**: Visualización intuitiva del progreso en cada categoría
+- **Texto optimizado**: Negro sobre fondos claros para máxima legibilidad
+- **Responsive automático**: Cambia automáticamente entre tabla y tarjetas según el tamaño de pantalla
  
 
 ## 📂 Estructura del Proyecto
@@ -33,8 +45,9 @@ Esta aplicación permite a estudiantes y administrativos consultar de manera rá
 CreditosDEIGoogle/
 ├── Page.html          # Interfaz principal del usuario
 ├── JavaScript.html    # Código JavaScript del lado del cliente
+├── Stylesheet.html    # Estilos CSS responsivos y vista móvil
+├── ConfigJS.html      # Configuración y constantes del sistema
 ├── codigo.js          # Lógica del servidor (Apps Script)
-├── linkURL.js         # Lógica adicional para enlaces
 ├── appsscript.json    # Configuración del proyecto Google Apps Script
 └── README.md          # Documentación del proyecto
 ```
@@ -46,6 +59,7 @@ CreditosDEIGoogle/
 - **Framework CSS**: Bootstrap 5.3.0
 - **Bibliotecas JS**: jsPDF, html2canvas para exportación a PDF
 - **Arquitectura**: Separación cliente-servidor, código modular
+- **Responsive Design**: Media queries personalizadas para móvil/desktop
 - **Fuentes**: Google Fonts (Segoe UI)
 - **Iconos**: Emojis Unicode para mejor compatibilidad
 
@@ -98,18 +112,45 @@ clasp push
 - Configurar acceso a hojas de cálculo de datos
  
 
-## 📱 Responsive Design
+## 📱 Diseño Responsivo
 
 El sistema está optimizado para:
-- 📱 **Móviles**: iPhone, Android (375px+)
-- 📱 **Tablets**: iPad, Android tablets (768px+)
-- 💻 **Desktop**: Pantallas grandes (1200px+)
+- 📱 **Móviles**: iPhone, Android (375px+) - Vista de tarjetas
+- 📱 **Tabletas**: iPad, Android tabletas (768px+) - Vista híbrida
+- 💻 **Escritorio**: Pantallas grandes (1200px+) - Vista de tabla completa
 
-### Características responsive
+### Características adaptativas
 - Tipografía fluida con `clamp()`
 - Barras de progreso adaptativas
-- Tablas con scroll horizontal en móviles
-- Interfaz táctil optimizada
+- **Vista móvil**: Tarjetas modernas con avatar y estado visual
+- **Vista escritorio**: Tablas completas con todas las categorías
+- Cambio automático de vista según el tamaño de pantalla
+- Interfaz táctil optimizada para móviles
+- Exportación a PDF compatible con ambas vistas
+
+### 🎨 Vista Móvil - Características Especiales
+
+#### 💳 Tarjetas de Estudiante
+- **Avatar personalizado**: Círculo perfecto con iniciales del estudiante
+- **Información destacada**: Nombre, carrera y matrícula prominentes
+- **Estados visuales**: 
+  - ✅ Verde claro para aprobado/completo
+  - ⚠️ Amarillo claro para pendiente
+  - ❌ Rojo claro para incompleto/faltante
+
+#### 📊 Visualización de Progreso
+- **Grilla de categorías**: Layout 2x3 para las 6 categorías (A-F)
+- **Barras de progreso**: Indicadores visuales por categoría
+- **Colores intuitivos**: 
+  - Verde: Categoría completa
+  - Amarillo: Progreso parcial
+  - Rojo: Sin progreso o insuficiente
+
+#### 🔤 Optimización de Legibilidad
+- **Texto negro**: Máximo contraste sobre fondos claros
+- **Fondos claros**: Blanco y grises muy claros
+- **Jerarquía visual**: Diferentes tonos para títulos, subtítulos y datos
+- **Accesibilidad**: Cumple estándares WCAG de contraste
 
 ## 🎨 Guía de Estilo
 
@@ -128,18 +169,46 @@ El sistema está optimizado para:
 - Pesos: 400 (normal), 600 (semi-bold), 700 (bold)
 - Tamaños responsivos con clamp()
 
-## 🔒 Seguridad y Privacidad
+## 🆕 Últimas Actualizaciones (Septiembre 2025)
+
+### � Vista Móvil Renovada
+- **Nuevas tarjetas de estudiante**: Diseño moderno tipo card con avatar personalizado
+- **Avatar con iniciales**: Círculo perfecto que muestra las iniciales del estudiante
+- **Mejora de legibilidad**: Todo el texto en negro sobre fondos claros para mejor contraste
+- **Responsive automático**: Detección automática del tamaño de pantalla para cambiar vistas
+
+### 🎨 Mejoras de Interfaz
+- **Encabezados unificados**: Tanto vista simplificada como completa usan el mismo estilo azul
+- **Optimización de colores**: Fondos más claros y mejor contraste en vista móvil
+- **Corrección de avatar**: Avatar perfectamente redondo sin deformaciones
+- **Texto negro uniforme**: Todas las categorías y valores en negro para mejor legibilidad
+
+### 📊 Funcionalidades Mejoradas
+- **Dos modos de vista**: Simplificada (datos esenciales) y Completa (todos los detalles)
+- **Cambio dinámico**: Botones para alternar entre vistas sin recargar
+- **Exportación mejorada**: PDF funciona correctamente con ambas vistas (tabla y tarjetas)
+- **Detección de pantalla**: Adapta automáticamente la interfaz al redimensionar la ventana
+
+## �🔒 Seguridad y Privacidad
 
 - ✅ Datos estudiantiles protegidos
-- ✅ Acceso controlado por Google Auth
+- ✅ Acceso controlado por autenticación de Google
 - ✅ Sin almacenamiento local de datos sensibles
-- ✅ Historial de búsquedas solo en localStorage
+- ✅ Historial de búsquedas solo en almacenamiento local del navegador
 - ✅ Comunicación HTTPS exclusivamente
 
+## 📞 Soporte y Contacto
+
+- 📧 **Contacto DEI**: dei@uc.edu.py
+- 🛠️ **Desarrollador**: omar.irrazabal@uc.edu.py
+- 📚 **Repositorio**: [github.com/OIrrazabal/creditos-academicos-DEI](https://github.com/OIrrazabal/creditos-academicos-DEI)
 
 ## 📝 Licencia
 
 Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
-**Última actualización**: Julio 2025  
-**Desarrollado con** ❤️ **por**: OI 2025
+---
+
+**Última actualización**: Septiembre 2025  
+**Desarrollado con** ❤️ **por**: Omar Irrazabal (OI)  
+**Universidad Católica "Nuestra Señora de la Asunción"** - DEI
