@@ -391,5 +391,334 @@ footer a:hover {
     margin-bottom: 15px;
     text-align: center;
   }
+
+  /* Vista móvil tipo tarjeta */
+  .vista-simplificada .table-responsive,
+  .vista-completa .table-responsive {
+    overflow: visible;
+  }
+
+  .vista-simplificada .table,
+  .vista-completa .table {
+    display: none;
+  }
+
+  .mobile-card-container {
+    display: block !important;
+  }
+
+  .mobile-student-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border: 1px solid #e9ecef;
+    position: relative;
+    overflow: hidden;
+    color: #000000 !important;
+  }
+
+  .mobile-student-card * {
+    color: #000000 !important;
+  }
+
+  .mobile-card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f0f0f0;
+  }
+
+  .mobile-student-avatar {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    min-height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #4151B0 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white !important;
+    font-weight: bold;
+    font-size: 18px;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  .mobile-student-info h6 {
+    margin: 0;
+    color: #000000 !important;
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+  .mobile-student-info .text-muted {
+    font-size: 14px;
+    margin: 2px 0 0 0;
+    color: #555555 !important;
+  }
+
+  .mobile-status-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    gap: 12px;
+  }
+
+  .mobile-status-item {
+    flex: 1;
+    text-align: center;
+    padding: 12px 8px;
+    border-radius: 8px;
+    background: #f8f9fa;
+    color: #000000 !important;
+  }
+
+  .mobile-status-item * {
+    color: #000000 !important;
+  }
+
+  .mobile-status-item.approved {
+    background: #e8f5e8;
+    border: 1px solid #28a745;
+    color: #000000 !important;
+  }
+
+  .mobile-status-item.pending {
+    background: #fff8e1;
+    border: 1px solid #ffc107;
+    color: #000000 !important;
+  }
+
+  .mobile-status-item.incomplete {
+    background: #ffeaea;
+    border: 1px solid #dc3545;
+    color: #000000 !important;
+  }
+
+  .mobile-status-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #666666 !important;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+
+  .mobile-status-value {
+    font-size: 14px;
+    font-weight: bold;
+    color: #000000 !important;
+  }
+
+  .mobile-credits-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+    color: #000000 !important;
+  }
+
+  .mobile-credits-grid * {
+    color: #000000 !important;
+  }
+
+  .mobile-credit-item {
+    background: #f5f5f5;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border-left: 3px solid var(--primary-color);
+    color: #000000 !important;
+  }
+
+  .mobile-credit-item * {
+    color: #000000 !important;
+  }
+
+  .mobile-credit-label {
+    font-size: 10px;
+    color: #000000 !important;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+
+  .mobile-credit-value {
+    font-size: 13px;
+    font-weight: bold;
+    color: #000000 !important;
+  }
+
+  .mobile-total-credits {
+    background: #f0f2f8;
+    color: #000000 !important;
+    border: 2px solid var(--primary-color);
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .mobile-total-credits * {
+    color: #000000 !important;
+  }
+
+  .mobile-total-credits.complete {
+    background: #e8f5e8;
+    border: 2px solid #28a745;
+    color: #000000 !important;
+  }
+
+  .mobile-total-label {
+    font-size: 12px;
+    margin-bottom: 4px;
+    color: #666666 !important;
+    font-weight: 500;
+  }
+
+  .mobile-total-value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #000000 !important;
+  }
+
+  .mobile-card-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .mobile-detail-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .mobile-detail-btn.primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #4151B0 100%);
+    color: white !important;
+  }
+
+  .mobile-detail-btn.disabled {
+    background: #6c757d;
+    color: white !important;
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .mobile-progress-bar {
+    width: 100%;
+    height: 4px;
+    background-color: #e9ecef;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+
+  .mobile-progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  .mobile-progress-fill.complete {
+    background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+  }
+
+  .mobile-progress-fill.partial {
+    background: linear-gradient(90deg, #ffc107 0%, #fd7e14 100%);
+  }
+
+  .mobile-progress-fill.incomplete {
+    background: linear-gradient(90deg, #dc3545 0%, #fd7e14 100%);
+  }
+}
+
+/* Ocultar la vista móvil en desktop */
+@media (min-width: 769px) {
+  .mobile-card-container {
+    display: none !important;
+  }
+}
+
+/* Estilos para controles de vista */
+#controles-vista {
+  transition: all 0.3s ease;
+}
+
+#controles-vista .btn-group .btn-outline-primary {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  transition: all 0.2s ease;
+}
+
+#controles-vista .btn-group .btn-outline-primary:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+#controles-vista .btn-group .btn-check:checked + .btn-outline-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+/* Estilos para vista simplificada */
+.vista-simplificada {
+  background-color: #f8f9fa;
+}
+
+.vista-simplificada .table {
+  background-color: white;
+}
+
+.vista-simplificada .table th {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  font-weight: 600;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.vista-simplificada .table td {
+  vertical-align: middle;
+  text-align: center;
+  border-color: #dee2e6;
+}
+
+.vista-simplificada .badge {
+  font-size: 0.875rem;
+  padding: 0.5em 0.75em;
+}
+
+/* Estilos para vista completa */
+.vista-completa {
+  background-color: #f8f9fa;
+}
+
+.vista-completa .table {
+  background-color: white;
+}
+
+.vista-completa .table th {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  font-weight: 600;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.vista-completa .table td {
+  vertical-align: middle;
+  text-align: center;
+  border-color: #dee2e6;
 }
 </style>

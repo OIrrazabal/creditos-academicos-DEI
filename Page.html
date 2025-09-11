@@ -50,6 +50,30 @@
       </div>
     </div>
 
+    <!-- Controles de vista para resultados -->
+    <div id="controles-vista" class="row mb-3 d-none">
+      <div class="col-12">
+        <div class="card border-0 bg-light">
+          <div class="card-body py-2">
+            <div class="d-flex justify-content-between align-items-center">
+              <h6 class="mb-0 text-muted">📊 Modo de visualización</h6>
+              <div class="btn-group" role="group" aria-label="Controles de vista">
+                <input type="radio" class="btn-check" name="vista-radio" id="vista-simplificada" autocomplete="off" checked>
+                <label class="btn btn-outline-primary btn-sm" for="vista-simplificada" onclick="cambiarVista('simplificada')">
+                  📋 Vista Simplificada
+                </label>
+                
+                <input type="radio" class="btn-check" name="vista-radio" id="vista-completa" autocomplete="off">
+                <label class="btn btn-outline-primary btn-sm" for="vista-completa" onclick="cambiarVista('completa')">
+                  📊 Vista Completa
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="loader" aria-label="Cargando datos" role="dialog" aria-live="polite">
       <div class="loader-content">
         <img src="https://i.gifer.com/5SvD.gif" alt="Cargando..." class="loader-image">
@@ -255,7 +279,7 @@
         <div class="col-md-6 mb-3">
           <div class="faq-item p-3" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 8px; border-left: 4px solid var(--primary-color);">
             <h6 style="color: var(--primary-color); font-weight: bold;">🎯 ¿Cuántos créditos necesito para graduarme?</h6>
-            <p style="margin-bottom: 0; font-size: 0.9rem;">Necesitas <strong>20 créditos académicos</strong> distribuidos en las categorías A-F, más la <strong>suficiencia en inglés</strong>.</p>
+            <p style="margin-bottom: 0; font-size: 0.9rem;">Necesitas <strong>20 créditos académicos</strong> distribuidos en las categorías A-F, más la <strong>suficiencia en inglés</strong>. Se requiere 7 créditos de Pasantías como mínimo. (Obligatorio)</p>
           </div>
         </div>
         <div class="col-md-6 mb-3">
@@ -287,7 +311,7 @@
         </div>
         <div class="col-md-6">
           <strong>🛠️ Desarrollado con ❤️ por</strong><br>
-          <a href="mailto:omar.irrazabal@uc.edu.py" class="text-white">Omar Irrazabal OI- julio 2025</a>
+          <a href="mailto:omar.irrazabal@uc.edu.py" class="text-white">Omar Irrazabal OI- setiembre 2025</a>
         </div>
       </div>
     </footer>

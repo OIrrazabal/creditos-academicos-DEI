@@ -8,6 +8,7 @@
 var allResults = [];
 var currentPage = 1;
 var loadingInterval = null;
+var vistaActual = 'simplificada'; // Nueva variable para controlar la vista
 
 /**
  * Inicializa la aplicación cuando el DOM está listo
@@ -25,6 +26,44 @@ function inicializarApp() {
   
   if (apellidoInput) {
     apellidoInput.addEventListener('keydown', handleKeyDown);
+  }
+  
+  // Agregar listener para cambios de tamaño de ventana
+  window.addEventListener('resize', function() {
+    // Debounce para evitar demasiadas llamadas
+    clearTimeout(window.resizeTimeout);
+    window.resizeTimeout = setTimeout(function() {
+      // Re-renderizar la tabla si hay resultados
+      if (allResults && allResults.length > 0) {
+        renderTablaPaginada();
+      }
+    }, 250);
+  });
+}
+
+/**
+ * Cambia entre vista simplificada y completa
+ */
+function cambiarVista(tipoVista) {
+  vistaActual = tipoVista;
+  
+  // Actualizar botones
+  var btnSimplificada = document.getElementById('vista-simplificada');
+  var btnCompleta = document.getElementById('vista-completa');
+  
+  if (btnSimplificada && btnCompleta) {
+    if (tipoVista === 'simplificada') {
+      btnSimplificada.checked = true;
+      btnCompleta.checked = false;
+    } else {
+      btnSimplificada.checked = false;
+      btnCompleta.checked = true;
+    }
+  }
+  
+  // Re-renderizar la tabla si hay resultados
+  if (allResults && allResults.length > 0) {
+    renderTablaPaginada();
   }
 }
 
@@ -331,6 +370,7 @@ function construirFila(data) {
  */
 function renderTablaPaginada() {
   var resultadoDiv = document.getElementById("resultado");
+  var controlesVista = document.getElementById("controles-vista");
   var RESULTS_PER_PAGE = CONFIG.RESULTS_PER_PAGE;
   
   if (!resultadoDiv) return;
@@ -351,7 +391,17 @@ function renderTablaPaginada() {
         '<p class="mb-0">Verifica que la matrícula esté correctamente escrita.<br>' +
         'Si crees que es un error, contacta al DEI.</p>' +
       '</div>';
+    
+    // Ocultar controles de vista si no hay resultados
+    if (controlesVista) {
+      controlesVista.classList.add('d-none');
+    }
     return;
+  }
+
+  // Mostrar controles de vista si hay resultados
+  if (controlesVista) {
+    controlesVista.classList.remove('d-none');
   }
 
   var totalPages = Math.ceil(allResults.length / RESULTS_PER_PAGE);
@@ -359,19 +409,100 @@ function renderTablaPaginada() {
   var end = start + RESULTS_PER_PAGE;
   var datosPagina = allResults.slice(start, end);
 
-
   // Obtenemos el nombre del alumno para el título del PDF
   var nombreAlumno = allResults.length > 0 ? limpiarHTML(allResults[0].nombreAlumno || 'Alumno') : 'Alumno';
   
-  var tableHtml = 
-    '<div id="resultados-container" class="mt-4">' +
+  var tableHtml;
+  
+  if (vistaActual === 'simplificada') {
+    tableHtml = renderVistaSimplificada(datosPagina, nombreAlumno, totalPages);
+  } else {
+    tableHtml = renderVistaCompleta(datosPagina, nombreAlumno, totalPages);
+  }
+
+  resultadoDiv.innerHTML = tableHtml;
+}
+
+/**
+ * Renderiza la vista simplificada con solo datos esenciales
+ */
+function renderVistaSimplificada(datosPagina, nombreAlumno, totalPages) {
+  var isMobile = window.innerWidth <= 768;
+  
+  if (isMobile) {
+    return '<div id="resultados-container" class="mt-4 vista-simplificada">' +
       '<div class="d-flex justify-content-between align-items-center mb-3">' +
-        '<h4 class="mb-0">Resultados de la consulta</h4>' +
-        '<button id="btnExportarPDF" class="btn btn-danger" onclick="exportarAPDF(\'' + nombreAlumno + '\')"><i class="bi bi-file-earmark-pdf"></i> Exportar a PDF</button>' +
+        '<h4 class="mb-0">📋 Vista Simplificada</h4>' +
+        '<button id="btnExportarPDF" class="btn btn-danger btn-sm" onclick="exportarAPDF(\'' + nombreAlumno + '\')">📄 PDF</button>' +
       '</div>' +
-      '<div class="table-responsive" id="tabla-resultados">' +
-        '<table class="table table-bordered table-striped" style="background-color: #C8CBD4; color: #000;">' +
-          '<thead style="background-color: #AEB1BD; font-weight: bold;">' +
+      '<div class="mobile-card-container">' +
+        datosPagina.map(construirTarjetaMovil).join('') +
+      '</div>' +
+      '<div class="table-responsive d-none" id="tabla-resultados">' +
+        '<table class="table table-bordered table-hover">' +
+          '<thead>' +
+            '<tr>' +
+              '<th>👤 Estudiante</th>' +
+              '<th>🎓 Matrícula</th>' +
+              '<th>🇬🇧 Suficiencia en Inglés</th>' +
+              '<th>📊 Total de Créditos</th>' +
+            '</tr>' +
+          '</thead>' +
+          '<tbody>' +
+            datosPagina.map(construirFilaSimplificada).join('') +
+          '</tbody>' +
+        '</table>' +
+      '</div>' +
+      '<div class="text-center mt-3">' +
+        renderPaginacion(totalPages) +
+      '</div>' +
+    '</div>';
+  }
+  
+  return '<div id="resultados-container" class="mt-4 vista-simplificada">' +
+    '<div class="d-flex justify-content-between align-items-center mb-3">' +
+      '<h4 class="mb-0">📋 Vista Simplificada</h4>' +
+      '<button id="btnExportarPDF" class="btn btn-danger" onclick="exportarAPDF(\'' + nombreAlumno + '\')"><i class="bi bi-file-earmark-pdf"></i> Exportar a PDF</button>' +
+    '</div>' +
+    '<div class="table-responsive" id="tabla-resultados">' +
+      '<table class="table table-bordered table-hover">' +
+        '<thead>' +
+          '<tr>' +
+            '<th>👤 Estudiante</th>' +
+            '<th>🎓 Matrícula</th>' +
+            '<th>🇬🇧 Suficiencia en Inglés</th>' +
+            '<th>📊 Total de Créditos</th>' +
+          '</tr>' +
+        '</thead>' +
+        '<tbody>' +
+          datosPagina.map(construirFilaSimplificada).join('') +
+        '</tbody>' +
+      '</table>' +
+    '</div>' +
+    '<div class="text-center mt-3">' +
+      renderPaginacion(totalPages) +
+    '</div>' +
+  '</div>';
+}
+
+/**
+ * Renderiza la vista completa con todos los detalles
+ */
+function renderVistaCompleta(datosPagina, nombreAlumno, totalPages) {
+  var isMobile = window.innerWidth <= 768;
+  
+  if (isMobile) {
+    return '<div id="resultados-container" class="mt-4 vista-completa">' +
+      '<div class="d-flex justify-content-between align-items-center mb-3">' +
+        '<h4 class="mb-0">📊 Vista Completa</h4>' +
+        '<button id="btnExportarPDF" class="btn btn-danger btn-sm" onclick="exportarAPDF(\'' + nombreAlumno + '\')">📄 PDF</button>' +
+      '</div>' +
+      '<div class="mobile-card-container">' +
+        datosPagina.map(construirTarjetaMovilCompleta).join('') +
+      '</div>' +
+      '<div class="table-responsive d-none" id="tabla-resultados">' +
+        '<table class="table table-bordered table-hover">' +
+          '<thead>' +
             '<tr>' +
               '<th>Alumno/a</th>' +
               '<th>Carrera</th>' +
@@ -394,8 +525,76 @@ function renderTablaPaginada() {
         renderPaginacion(totalPages) +
       '</div>' +
     '</div>';
+  }
+  
+  return '<div id="resultados-container" class="mt-4 vista-completa">' +
+    '<div class="d-flex justify-content-between align-items-center mb-3">' +
+      '<h4 class="mb-0">📊 Vista Completa</h4>' +
+      '<button id="btnExportarPDF" class="btn btn-danger" onclick="exportarAPDF(\'' + nombreAlumno + '\')"><i class="bi bi-file-earmark-pdf"></i> Exportar a PDF</button>' +
+    '</div>' +
+    '<div class="table-responsive" id="tabla-resultados">' +
+      '<table class="table table-bordered table-hover">' +
+        '<thead>' +
+          '<tr>' +
+            '<th>Alumno/a</th>' +
+            '<th>Carrera</th>' +
+            '<th>Suficiencia en Inglés<br><span class="requisito-obligatorio">(Requisito obligatorio)</span></th>' +
+            '<th>Cursos Optativos (A) máx: 12</th>' +
+            '<th>Conferencias/Congresos/Seminarios (B) máx: 4</th>' +
+            '<th>Ayudantías de Cátedra (C) máx: 10</th>' +
+            '<th>Extensión Universitaria (D) máx: 2</th>' +
+            '<th>Pasantías Supervizadas (E) máx: 10<br><span class="requisito-obligatorio">(Obligatorio)</span></th>' +
+            '<th>Otros (F) máx: 4</th>' +
+            '<th>Total Créditos<br><span class="requisito-obligatorio">(Meta: 20)</span></th>' +
+          '</tr>' +
+        '</thead>' +
+        '<tbody>' +
+          datosPagina.map(construirFila).join('') +
+        '</tbody>' +
+      '</table>' +
+    '</div>' +
+    '<div class="text-center mt-3">' +
+      renderPaginacion(totalPages) +
+    '</div>' +
+  '</div>';
+}
 
-  resultadoDiv.innerHTML = tableHtml;
+/**
+ * Construye una fila para la vista simplificada
+ */
+function construirFilaSimplificada(estudiante) {
+  var nombre = limpiarHTML(estudiante.nombreAlumno || 'N/A');
+  var matricula = limpiarHTML(estudiante.matricula || 'N/A');
+  var totalCreditos = estudiante.cantidadCreditoAlumnoTotal || 0;
+  
+  // Suficiencia en inglés
+  var suficienciaTexto = 'No especificado';
+  var suficienciaClass = 'bg-secondary';
+  
+  if (estudiante.AprobacionSI) {
+    var aprobacion = String(estudiante.AprobacionSI).toLowerCase();
+    if (aprobacion.includes('sí') || aprobacion.includes('si') || aprobacion === 'aprobado') {
+      suficienciaTexto = 'Aprobado';
+      suficienciaClass = 'bg-success';
+    } else if (aprobacion.includes('no') || aprobacion === 'no aprobado') {
+      suficienciaTexto = 'No Aprobado';
+      suficienciaClass = 'bg-danger';
+    }
+  }
+  
+  // Total de créditos con estilo
+  var creditosClass = totalCreditos >= 20 ? 'bg-success' : 'bg-warning';
+  var creditosTexto = totalCreditos >= 20 ? 'Completo' : 'Incompleto';
+  
+  return '<tr>' +
+    '<td><strong>' + nombre + '</strong></td>' +
+    '<td>' + matricula + '</td>' +
+    '<td><span class="badge ' + suficienciaClass + '">' + suficienciaTexto + '</span></td>' +
+    '<td>' +
+      '<span class="badge ' + creditosClass + ' fs-6">' + totalCreditos + '/20</span> ' +
+      '<small class="text-muted">(' + creditosTexto + ')</small>' +
+    '</td>' +
+  '</tr>';
 }
 
 /**
@@ -544,41 +743,59 @@ function exportarAPDF(nombreAlumno) {
       doc.setFontSize(10);
       doc.text("Fecha de generación: " + fecha, centerX, 32, { align: 'center' });
       
-      // Obtenemos la tabla y preparamos para capturarla correctamente
-      var tablaResultados = document.getElementById('tabla-resultados');
+      // Obtenemos el elemento a capturar
+      var isMobile = window.innerWidth <= 768;
+      var elementoACapturar;
+      
+      if (isMobile) {
+        // En móvil, capturar las tarjetas
+        elementoACapturar = document.querySelector('.mobile-card-container');
+        if (!elementoACapturar) {
+          // Fallback a la tabla si no hay tarjetas
+          elementoACapturar = document.getElementById('tabla-resultados');
+        }
+      } else {
+        // En desktop, capturar la tabla
+        elementoACapturar = document.getElementById('tabla-resultados');
+      }
+      
+      if (!elementoACapturar) {
+        alert("No se pudo encontrar el contenido para exportar.");
+        resultadoDiv.removeChild(loadingOverlay);
+        return;
+      }
       
       // SOLUCIÓN PARA DISPOSITIVOS MÓVILES: 
       // 1. Guardar el estilo original
-      var estiloOriginal = tablaResultados.style.cssText;
+      var estiloOriginal = elementoACapturar.style.cssText;
       
       // 2. Forzar ancho completo temporalmente durante la captura
-      tablaResultados.style.width = "100%";
-      tablaResultados.style.maxWidth = "none";
-      tablaResultados.style.overflow = "visible";
+      elementoACapturar.style.width = "100%";
+      elementoACapturar.style.maxWidth = "none";
+      elementoACapturar.style.overflow = "visible";
       
       // 3. Si es un dispositivo móvil, ajustar el tamaño para mejor captura
-      var esMobile = window.innerWidth < 768;
-      if (esMobile) {
+      if (isMobile) {
         // Agregar estilos temporales para la captura en móvil
-        tablaResultados.style.transform = "scale(1)";
-        tablaResultados.style.transformOrigin = "top left";
+        elementoACapturar.style.transform = "scale(1)";
+        elementoACapturar.style.transformOrigin = "top left";
       }
       
       // Utilizamos html2canvas con opciones mejoradas
-      html2canvas(tablaResultados, {
-        scale: esMobile ? 1.5 : 2, // Mayor escala para dispositivos móviles
+      html2canvas(elementoACapturar, {
+        scale: isMobile ? 1.5 : 2, // Mayor escala para dispositivos móviles
         useCORS: true,
         logging: false,
         allowTaint: true,
         scrollX: 0,
         scrollY: 0,
-        width: tablaResultados.scrollWidth, // Captura todo el ancho
-        height: tablaResultados.scrollHeight, // Captura toda la altura
+        width: elementoACapturar.scrollWidth, // Captura todo el ancho
+        height: elementoACapturar.scrollHeight, // Captura toda la altura
         windowWidth: document.documentElement.offsetWidth,
         windowHeight: document.documentElement.offsetHeight
       }).then(function(canvas) {
         // Restaurar los estilos originales
-        tablaResultados.style.cssText = estiloOriginal;
+        elementoACapturar.style.cssText = estiloOriginal;
         
         var imgData = canvas.toDataURL('image/png');
         
@@ -624,6 +841,163 @@ function exportarAPDF(nombreAlumno) {
     alert("Ha ocurrido un error al generar el PDF. Por favor, intenta nuevamente.");
     resultadoDiv.removeChild(loadingOverlay);
   }
+}
+
+/**
+ * Construye una tarjeta móvil para la vista simplificada
+ */
+function construirTarjetaMovil(estudiante) {
+  var nombre = limpiarHTML(estudiante.nombreAlumno || 'Estudiante');
+  var carrera = limpiarHTML(estudiante.carrera || 'IF');
+  var matricula = limpiarHTML(estudiante.matricula || 'N/A');
+  var totalCreditos = estudiante.cantidadCreditoAlumnoTotal || 0;
+  
+  // Iniciales para el avatar
+  var iniciales = nombre.split(' ').map(function(n) { return n.charAt(0); }).join('').substring(0, 2).toUpperCase();
+  
+  // Suficiencia en inglés
+  var aprobado = false;
+  if (estudiante.AprobacionSI) {
+    var valor = String(estudiante.AprobacionSI).toLowerCase();
+    aprobado = valor === 'sí' || valor === 'si' || valor === 'yes' || valor === 'true' || valor === '1' || valor === 'aprobado';
+  }
+  
+  var suficienciaClass = aprobado ? 'approved' : 'incomplete';
+  var suficienciaTexto = aprobado ? 'APROBADO ✅' : 'NO APROBADO ❌';
+  
+  // Créditos
+  var creditosCompletos = totalCreditos >= 20;
+  var creditosClass = creditosCompletos ? 'approved' : 'incomplete';
+  var creditosTexto = totalCreditos + '/20';
+  var creditosSubtexto = creditosCompletos ? 'Completo' : 'Faltan ' + (20 - totalCreditos);
+  
+  // Enlace de detalles
+  var enlace = typeof estudiante.enlaceAlumno === 'string' ? estudiante.enlaceAlumno.trim() : '';
+  var enlaceValido = esURLValida(enlace);
+  var detalleHtml = enlaceValido ? 
+    '<a href="' + enlace + '" target="_blank" class="mobile-detail-btn primary">Ver Detalles</a>' :
+    '<span class="mobile-detail-btn disabled">Sin detalles</span>';
+  
+  return '<div class="mobile-student-card">' +
+    '<div class="mobile-card-header">' +
+      '<div class="mobile-student-avatar">' + iniciales + '</div>' +
+      '<div class="mobile-student-info">' +
+        '<h6>' + nombre + '</h6>' +
+        '<div class="text-muted">' + carrera + ' • ' + matricula + '</div>' +
+      '</div>' +
+    '</div>' +
+    
+    '<div class="mobile-status-row">' +
+      '<div class="mobile-status-item ' + suficienciaClass + '">' +
+        '<div class="mobile-status-label">🇬🇧 Inglés</div>' +
+        '<div class="mobile-status-value ' + suficienciaClass + '">' + suficienciaTexto + '</div>' +
+      '</div>' +
+      '<div class="mobile-status-item ' + creditosClass + '">' +
+        '<div class="mobile-status-label">📊 Créditos</div>' +
+        '<div class="mobile-status-value ' + creditosClass + '">' + creditosTexto + '</div>' +
+      '</div>' +
+    '</div>' +
+    
+    '<div class="mobile-total-credits ' + (creditosCompletos ? 'complete' : '') + '">' +
+      '<div class="mobile-total-label">Total de Créditos</div>' +
+      '<div class="mobile-total-value">' + creditosTexto + '</div>' +
+      '<div style="font-size: 12px; opacity: 0.9;">' + creditosSubtexto + '</div>' +
+    '</div>' +
+    
+    '<div class="mobile-card-actions">' +
+      detalleHtml +
+    '</div>' +
+  '</div>';
+}
+
+/**
+ * Construye una tarjeta móvil para la vista completa con todos los detalles
+ */
+function construirTarjetaMovilCompleta(estudiante) {
+  var nombre = limpiarHTML(estudiante.nombreAlumno || 'Estudiante');
+  var carrera = limpiarHTML(estudiante.carrera || 'IF');
+  var matricula = limpiarHTML(estudiante.matricula || 'N/A');
+  var totalCreditos = estudiante.cantidadCreditoAlumnoTotal || 0;
+  
+  // Iniciales para el avatar
+  var iniciales = nombre.split(' ').map(function(n) { return n.charAt(0); }).join('').substring(0, 2).toUpperCase();
+  
+  // Suficiencia en inglés
+  var aprobado = false;
+  if (estudiante.AprobacionSI) {
+    var valor = String(estudiante.AprobacionSI).toLowerCase();
+    aprobado = valor === 'sí' || valor === 'si' || valor === 'yes' || valor === 'true' || valor === '1' || valor === 'aprobado';
+  }
+  
+  var suficienciaClass = aprobado ? 'approved' : 'incomplete';
+  var suficienciaTexto = aprobado ? 'APROBADO ✅' : 'NO APROBADO ❌';
+  
+  // Función helper para crear barras de progreso móviles
+  function crearBarraMovil(actual, maximo, label) {
+    var porcentaje = Math.min((actual / maximo) * 100, 100);
+    var progressClass = porcentaje === 100 ? 'complete' : porcentaje >= 50 ? 'partial' : 'incomplete';
+    
+    return '<div class="mobile-credit-item">' +
+      '<div class="mobile-credit-label">' + label + '</div>' +
+      '<div class="mobile-credit-value">' + actual + '/' + maximo + '</div>' +
+      '<div class="mobile-progress-bar">' +
+        '<div class="mobile-progress-fill ' + progressClass + '" style="width: ' + porcentaje + '%;"></div>' +
+      '</div>' +
+    '</div>';
+  }
+  
+  // Créditos
+  var creditosCompletos = totalCreditos >= 20;
+  var creditosClass = creditosCompletos ? 'approved' : 'incomplete';
+  var creditosTexto = totalCreditos + '/20';
+  var creditosSubtexto = creditosCompletos ? 'Completo' : 'Faltan ' + (20 - totalCreditos);
+  
+  // Enlace de detalles
+  var enlace = typeof estudiante.enlaceAlumno === 'string' ? estudiante.enlaceAlumno.trim() : '';
+  var enlaceValido = esURLValida(enlace);
+  var detalleHtml = enlaceValido ? 
+    '<a href="' + enlace + '" target="_blank" class="mobile-detail-btn primary">Ver Detalles</a>' :
+    '<span class="mobile-detail-btn disabled">Sin detalles</span>';
+  
+  return '<div class="mobile-student-card">' +
+    '<div class="mobile-card-header">' +
+      '<div class="mobile-student-avatar">' + iniciales + '</div>' +
+      '<div class="mobile-student-info">' +
+        '<h6>' + nombre + '</h6>' +
+        '<div class="text-muted">' + carrera + ' • ' + matricula + '</div>' +
+      '</div>' +
+    '</div>' +
+    
+    '<div class="mobile-status-row">' +
+      '<div class="mobile-status-item ' + suficienciaClass + '">' +
+        '<div class="mobile-status-label">🇬🇧 Inglés</div>' +
+        '<div class="mobile-status-value ' + suficienciaClass + '">' + suficienciaTexto + '</div>' +
+      '</div>' +
+      '<div class="mobile-status-item ' + creditosClass + '">' +
+        '<div class="mobile-status-label">📊 Total</div>' +
+        '<div class="mobile-status-value ' + creditosClass + '">' + creditosTexto + '</div>' +
+      '</div>' +
+    '</div>' +
+    
+    '<div class="mobile-credits-grid">' +
+      crearBarraMovil(estudiante.MateriasCursos || 0, 12, '📘 Cursos (A)') +
+      crearBarraMovil(estudiante.Congresos || 0, 4, '🎓 Congresos (B)') +
+      crearBarraMovil(estudiante.AyudantiasPasantias || 0, 10, '🧑‍🏫 Ayudantías (C)') +
+      crearBarraMovil(estudiante.Investigacion || 0, 2, '🤝 Extensión (D)') +
+      crearBarraMovil(estudiante.Extension || 0, 10, '🛠️ Pasantías (E)') +
+      crearBarraMovil(estudiante.Otros || 0, 4, '📚 Otros (F)') +
+    '</div>' +
+    
+    '<div class="mobile-total-credits ' + (creditosCompletos ? 'complete' : '') + '">' +
+      '<div class="mobile-total-label">Total de Créditos</div>' +
+      '<div class="mobile-total-value">' + creditosTexto + '</div>' +
+      '<div style="font-size: 12px; opacity: 0.9;">' + creditosSubtexto + '</div>' +
+    '</div>' +
+    
+    '<div class="mobile-card-actions">' +
+      detalleHtml +
+    '</div>' +
+  '</div>';
 }
 
 // Inicializar cuando el DOM esté listo
