@@ -1,11 +1,13 @@
 
 # 🎓 Sistema de Consulta de Créditos Académicos DEI
 
-Sistema web desarrollado en Google Apps Script para consultar y visualizar los créditos académicos de estudiantes del Departamento de Electrónica e Informática (DEI) de la Universidad Católica "Nuestra Señora de la Asunción". Este proyecto contiene únicamente el módulo de consulta para estudiantes y administrativos.
+Proyecto desarrollado en Google Apps Script como parte del proceso de análisis de requerimientos de sistemas en el Departamento de Electrónica e Informática (DEI) de la Universidad Católica "Nuestra Señora de la Asunción".
+
+Este sistema constituye un ejemplo de diseño e implementación de soluciones de automatización de procesos, enfocado en la consulta y visualización de los créditos académicos de estudiantes. Actualmente, el proyecto contiene el módulo de consulta para estudiantes y administrativos.
 
 ## 📋 Descripción
 
-Esta aplicación permite a estudiantes y administrativos consultar de manera rápida y visual el progreso de créditos académicos requeridos para la graduación en las carreras de ingeniería del DEI.
+La aplicación surge como respuesta a la necesidad de contar con una herramienta que permita consultar de manera rápida, sencilla y visual el progreso de créditos académicos requeridos para la graduación en las carreras de ingeniería del DEI.
 
 ### ✨ Características principales
 
