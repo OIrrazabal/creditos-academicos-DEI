@@ -205,6 +205,10 @@ El sistema está optimizado para:
 - 🛠️ **Desarrollador**: omar.irrazabal@uc.edu.py
 - 📚 **Repositorio**: [github.com/OIrrazabal/creditos-academicos-DEI](https://github.com/OIrrazabal/creditos-academicos-DEI)
 
+## Implementación
+- La página para la gestión de los créditos es la siguiente: https://sites.google.com/uc.edu.py/creditosacademicosdei/inicio
+- La página para consultar los créditos la cual corresponde a este proyecto es la siguiente: https://script.google.com/macros/s/AKfycbz9V8njmnOHOYVw9yt-aHtG-7HAIqGUhfRVYNUP_B7aicrRFvjtrPNGWBNQ1r3XHr9BNA/exec
+
 ## 📝 Licencia
 
 Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
